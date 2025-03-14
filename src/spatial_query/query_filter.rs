@@ -1,4 +1,7 @@
-use bevy::{ecs::entity::hash_set::EntityHashSet, prelude::*};
+use bevy::{
+    ecs::entity::{hash_set::EntityHashSet, MapEntities},
+    prelude::*,
+};
 
 use crate::prelude::*;
 
@@ -98,5 +101,15 @@ impl SpatialQueryFilter {
         !self.excluded_entities.contains(&entity)
             && CollisionLayers::new(LayerMask::ALL, self.mask)
                 .interacts_with(CollisionLayers::new(layers.memberships, LayerMask::ALL))
+    }
+}
+
+impl MapEntities for SpatialQueryFilter {
+    fn map_entities<M: EntityMapper>(&mut self, entity_mapper: &mut M) {
+        self.excluded_entities = self
+            .excluded_entities
+            .iter()
+            .map(|&e| entity_mapper.get_mapped(e))
+            .collect();
     }
 }

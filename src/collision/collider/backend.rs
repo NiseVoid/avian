@@ -122,7 +122,12 @@ impl<C: ScalableCollider> Plugin for ColliderBackendPlugin<C> {
                 let parent_global_transform = world
                     .entity(ctx.entity)
                     .get::<ChildOf>()
-                    .and_then(|parent| world.entity(parent.get()).get::<GlobalTransform>().copied())
+                    .and_then(|parent| {
+                        world
+                            .entity(parent.parent)
+                            .get::<GlobalTransform>()
+                            .copied()
+                    })
                     .unwrap_or_default();
                 let transform = world
                     .entity(ctx.entity)
@@ -214,7 +219,7 @@ impl<C: ScalableCollider> Plugin for ColliderBackendPlugin<C> {
                     }
 
                     // Queue the parent rigid body for a mass property update.
-                    if let Some(mut entity_commands) = commands.get_entity(parent.get()) {
+                    if let Ok(mut entity_commands) = commands.get_entity(parent.get()) {
                         entity_commands.insert(RecomputeMassProperties);
                     }
                 }
@@ -670,7 +675,7 @@ fn collider_removed(
 ) {
     let parent = parent.get();
 
-    let Some(mut entity_commands) = commands.get_entity(parent) else {
+    let Ok(mut entity_commands) = commands.get_entity(parent) else {
         return;
     };
 

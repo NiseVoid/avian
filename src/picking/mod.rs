@@ -157,7 +157,7 @@ pub fn update_hits(
                 },
             );
 
-            output_events.send(PointerHits::new(ray_id.pointer, hits, camera.order as f32));
+            output_events.write(PointerHits::new(ray_id.pointer, hits, camera.order as f32));
         }
         #[cfg(feature = "3d")]
         {
@@ -192,7 +192,7 @@ pub fn update_hits(
                     (ray_hit_data.entity, hit_data)
                 })
             {
-                output_events.send(PointerHits::new(
+                output_events.write(PointerHits::new(
                     ray_id.pointer,
                     vec![(entity, hit_data)],
                     camera.order as f32,

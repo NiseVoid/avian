@@ -6,5 +6,8 @@ resolver = "2"
 opt-level = 1 # Use slightly better optimization, so examples work
 
 [patch.crates-io]
-bevy = { path = "../bevy" }
-bevy_math = { path = "../bevy/crates/bevy_math" }
+bevy = {git = "https://github.com/bevyengine/bevy"}
+bevy_math = {git = "https://github.com/bevyengine/bevy"}
+bevy_reflect = {git = "https://github.com/bevyengine/bevy"}
+bevy_heavy = {git = "https://github.com/NiseVoid/bevy_heavy", branch="no_std"}
+bevy_transform_interpolation = {git = "https://github.com/NiseVoid/bevy_transform_interpolation"}

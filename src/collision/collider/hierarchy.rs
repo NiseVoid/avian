@@ -213,7 +213,7 @@ pub(crate) fn propagate_collider_transforms(
         |(entity, transform, children)| {
             for (child, child_transform, is_child_rb, parent) in parent_query.iter_many(children) {
                 assert_eq!(
-                    parent.get(), entity,
+                    parent.parent, entity,
                     "Malformed hierarchy. This probably means that your hierarchy has been improperly maintained, or contains a cycle"
                 );
                 let changed = transform.is_changed() || parent.is_changed();
@@ -333,7 +333,7 @@ unsafe fn propagate_collider_transforms_recursive(
     let Some(children) = children else { return };
     for (child, child_transform, is_rb, parent) in parent_query.iter_many(children) {
         assert_eq!(
-            parent.get(), entity,
+            parent.parent, entity,
             "Malformed hierarchy. This probably means that your hierarchy has been improperly maintained, or contains a cycle"
         );
 

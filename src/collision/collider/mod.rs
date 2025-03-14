@@ -198,11 +198,11 @@ pub struct ColliderDisabled;
 )]
 /// }
 /// ```
-#[derive(Reflect, Clone, Copy, Component, Debug, PartialEq, Eq)]
+#[derive(Component, Reflect, Clone, Copy, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "serialize", reflect(Serialize, Deserialize))]
 #[reflect(Debug, Component, PartialEq)]
-pub struct ColliderParent(pub(crate) Entity);
+pub struct ColliderParent(#[entities] pub(crate) Entity);
 
 impl ColliderParent {
     /// Gets the `Entity` ID of the [`RigidBody`] that this [`Collider`] is attached to.
@@ -213,7 +213,7 @@ impl ColliderParent {
 
 impl MapEntities for ColliderParent {
     fn map_entities<M: EntityMapper>(&mut self, entity_mapper: &mut M) {
-        self.0 = entity_mapper.map_entity(self.0)
+        self.0 = entity_mapper.get_mapped(self.0)
     }
 }
 
@@ -526,7 +526,7 @@ impl MapEntities for CollidingEntities {
             .0
             .clone()
             .into_iter()
-            .map(|e| entity_mapper.map_entity(e))
+            .map(|e| entity_mapper.get_mapped(e))
             .collect()
     }
 }

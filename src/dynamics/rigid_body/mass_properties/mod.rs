@@ -392,7 +392,7 @@ fn queue_mass_recomputation_on_collider_mass_change(
     >,
 ) {
     for collider_parent in &mut query {
-        if let Some(mut entity_commands) = commands.get_entity(collider_parent.get()) {
+        if let Ok(mut entity_commands) = commands.get_entity(collider_parent.get()) {
             entity_commands.insert(RecomputeMassProperties);
         }
     }
